@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GELATOFLOW</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body class="auth-body">
+
+<div class="auth-contenedor">
+    <div class="auth-marca">
+        <img src="img/LOGO.png?v=2" alt="Logo GELATOFLOW" class="auth-logo">
+        <h1>GELATOFLOW</h1>
+        <p>Inicia sesion para entrar al sistema o crea una cuenta si aun no tienes usuario.</p>
+    </div>
+
+    <div class="auth-panel">
+        <div class="auth-tabs">
+            <button type="button" class="auth-tab activo" id="tabLogin">Iniciar sesion</button>
+            <button type="button" class="auth-tab" id="tabRegistro">Crear cuenta</button>
+        </div>
+
+        <form id="formLogin" class="auth-form activo">
+            <h2>Iniciar sesion</h2>
+
+            <label for="correoLogin">Correo:</label>
+            <input type="email" id="correoLogin" placeholder="correo@ejemplo.com" required>
+
+            <label for="passwordLogin">Contrasena:</label>
+            <input type="password" id="passwordLogin" placeholder="Ingresa tu contrasena" required>
+
+            <input type="submit" value="Entrar">
+            <p class="auth-mensaje" id="mensajeLogin"></p>
+        </form>
+
+        <form id="formRegistro" class="auth-form">
+            <h2>Crear cuenta</h2>
+
+            <label for="nombreRegistro">Nombre completo:</label>
+            <input type="text" id="nombreRegistro" placeholder="Tu nombre" required>
+
+            <label for="correoRegistro">Correo:</label>
+            <input type="email" id="correoRegistro" placeholder="correo@ejemplo.com" required>
+
+            <label for="passwordRegistro">Contrasena:</label>
+            <input type="password" id="passwordRegistro" placeholder="Minimo 4 caracteres" minlength="4" required>
+
+            <label for="confirmarPassword">Confirmar contrasena:</label>
+            <input type="password" id="confirmarPassword" placeholder="Repite tu contrasena" minlength="4" required>
+
+            <input type="submit" value="Registrarme">
+            <p class="auth-mensaje" id="mensajeRegistro"></p>
+        </form>
+    </div>
+</div>
+
+<script>
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegistro = document.getElementById('tabRegistro');
+    const formLogin = document.getElementById('formLogin');
+    const formRegistro = document.getElementById('formRegistro');
+    const mensajeLogin = document.getElementById('mensajeLogin');
+    const mensajeRegistro = document.getElementById('mensajeRegistro');
+
+    function obtenerUsuarios() {
+        return JSON.parse(localStorage.getItem('gelatoflowUsuarios')) || [];
+    }
+
+    function guardarUsuarios(usuarios) {
+        localStorage.setItem('gelatoflowUsuarios', JSON.stringify(usuarios));
+    }
+
+    function mostrarFormulario(tipo) {
+        const esLogin = tipo === 'login';
+
+        tabLogin.classList.toggle('activo', esLogin);
+        tabRegistro.classList.toggle('activo', !esLogin);
+        formLogin.classList.toggle('activo', esLogin);
+        formRegistro.classList.toggle('activo', !esLogin);
+        mensajeLogin.textContent = '';
+        mensajeRegistro.textContent = '';
+    }
+
+    function iniciarSesion(usuario) {
+        localStorage.setItem('gelatoflowSesionActiva', 'true');
+        localStorage.setItem('gelatoflowUsuarioActual', usuario.correo);
+        window.location.href = 'index.html';
+    }
+
+    tabLogin.addEventListener('click', () => mostrarFormulario('login'));
+    tabRegistro.addEventListener('click', () => mostrarFormulario('registro'));
+
+    formLogin.addEventListener('submit', (evento) => {
+        evento.preventDefault();
+
+        const correo = document.getElementById('correoLogin').value.trim().toLowerCase();
+        const password = document.getElementById('passwordLogin').value.trim();
+        const usuarios = obtenerUsuarios();
+        const usuarioEncontrado = usuarios.find((usuario) => usuario.correo === correo && usuario.password === password);
+
+        if (!usuarioEncontrado) {
+            mensajeLogin.textContent = 'Correo o contrasena incorrectos.';
+            mensajeLogin.className = 'auth-mensaje error';
+            return;
+        }
+
+        mensajeLogin.textContent = 'Inicio de sesion correcto. Entrando...';
+        mensajeLogin.className = 'auth-mensaje exito';
+
+        setTimeout(() => iniciarSesion(usuarioEncontrado), 700);
+    });
+
+    formRegistro.addEventListener('submit', (evento) => {
+        evento.preventDefault();
+
+        const nombre = document.getElementById('nombreRegistro').value.trim();
+        const correo = document.getElementById('correoRegistro').value.trim().toLowerCase();
+        const password = document.getElementById('passwordRegistro').value.trim();
+        const confirmarPassword = document.getElementById('confirmarPassword').value.trim();
+        const usuarios = obtenerUsuarios();
+
+        if (password !== confirmarPassword) {
+            mensajeRegistro.textContent = 'Las contrasenas no coinciden.';
+            mensajeRegistro.className = 'auth-mensaje error';
+            return;
+        }
+
+        if (usuarios.some((usuario) => usuario.correo === correo)) {
+            mensajeRegistro.textContent = 'Ese correo ya esta registrado.';
+            mensajeRegistro.className = 'auth-mensaje error';
+            return;
+        }
+
+        usuarios.push({ nombre, correo, password });
+        guardarUsuarios(usuarios);
+        formRegistro.reset();
+
+        mensajeRegistro.textContent = 'Cuenta creada. Ahora puedes iniciar sesion.';
+        mensajeRegistro.className = 'auth-mensaje exito';
+
+        setTimeout(() => mostrarFormulario('login'), 1200);
+    });
+</script>
+
+</body>
+</html>
