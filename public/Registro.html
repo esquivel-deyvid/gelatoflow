@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos - GELATOFLOW</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/tema.js" defer></script>
+    <script>
+        if (localStorage.getItem('gelatoflowSesionActiva') !== 'true') {
+            window.location.href = 'Login.html';
+        }
+    </script>
+</head>
+<body>
+<button type="button" class="tema-boton" id="botonTema" aria-label="Cambiar modo nocturno" aria-pressed="false">&#9790;</button>
+
+<div class="contenedor pedido-contenedor">
+    <h1>Mi Pedido</h1>
+    <p>Revisa tu carrito y completa tus datos para pagar.</p>
+
+    <a href="index.html#productos" class="boton-regresar">Regresar al catalogo</a>
+
+    <div class="resumen-pedido">
+        <h2>Resumen del carrito</h2>
+        <ul id="resumenCarrito"></ul>
+        <p class="carrito-vacio" id="pedidoVacio">Tu carrito esta vacio.</p>
+        <p class="carrito-total">Total: <strong id="pedidoTotal">$0.00</strong></p>
+    </div>
+
+    <form id="formPedido">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" required>
+
+        <label for="correo">Correo:</label>
+        <input type="email" name="correo" id="correo" required>
+
+        <label for="telefono">Telefono:</label>
+        <input type="tel" name="telefono" id="telefono" required>
+
+        <label for="fecha_entrega">Fecha de entrega:</label>
+        <input type="date" name="fecha_entrega" id="fecha_entrega" required>
+
+        <label for="direccion">Direccion:</label>
+        <textarea name="direccion" id="direccion" required></textarea>
+
+        <input type="submit" value="Pagar" id="botonPagar">
+    </form>
+
+    <p class="auth-mensaje" id="mensajePedido"></p>
+</div>
+
+<script>
+    const carritoKey = 'gelatoflowCarrito';
+    const carrito = JSON.parse(localStorage.getItem(carritoKey)) || [];
+    const resumenCarrito = document.getElementById('resumenCarrito');
+    const pedidoVacio = document.getElementById('pedidoVacio');
+    const pedidoTotal = document.getElementById('pedidoTotal');
+    const formPedido = document.getElementById('formPedido');
+    const botonPagar = document.getElementById('botonPagar');
+    const mensajePedido = document.getElementById('mensajePedido');
+
+    document.getElementById('correo').value = localStorage.getItem('gelatoflowUsuarioActual') || '';
+
+    function guardarCarrito() {
+        localStorage.setItem(carritoKey, JSON.stringify(carrito));
+    }
+
+    function mostrarResumen() {
+        resumenCarrito.innerHTML = '';
+        pedidoVacio.style.display = carrito.length === 0 ? 'block' : 'none';
+        botonPagar.disabled = carrito.length === 0;
+
+        let total = 0;
+        carrito.forEach((item, index) => {
+            total += item.precio * item.cantidad;
+            const fila = document.createElement('li');
+            fila.innerHTML = `
+                <span>${item.nombre} x${item.cantidad}</span>
+                <strong>$${(item.precio * item.cantidad).toFixed(2)}</strong>
+                <button type="button" class="carrito-eliminar" title="Eliminar producto" aria-label="Eliminar producto">&#128465;</button>
+            `;
+
+            fila.querySelector('.carrito-eliminar').addEventListener('click', () => {
+                carrito.splice(index, 1);
+                guardarCarrito();
+                mostrarResumen();
+            });
+
+            resumenCarrito.appendChild(fila);
+        });
+
+        pedidoTotal.textContent = `$${total.toFixed(2)}`;
+    }
+
+    formPedido.addEventListener('submit', async (e) => {
+        try {
+            e.preventDefault();
+
+            if (carrito.length === 0) {
+                mensajePedido.textContent = 'Agrega productos al carrito antes de pagar.';
+                return;
+            }
+
+            botonPagar.disabled = true;
+            botonPagar.value = 'Procesando...';
+
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                correo: document.getElementById('correo').value,
+                telefono: document.getElementById('telefono').value,
+                fecha: document.getElementById('fecha_entrega').value,
+                direccion: document.getElementById('direccion').value,
+                items: carrito
+            };
+
+            const response = await fetch('/guardar-pedido', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                localStorage.removeItem(carritoKey);
+                mensajePedido.textContent = 'Pedido registrado. Pago confirmado.';
+                window.location.href = 'index.html#productos';
+                return;
+            }
+
+            mensajePedido.textContent = data.message || 'Error al guardar el pedido.';
+        } catch (error) {
+            mensajePedido.textContent = 'No se pudo registrar el pedido.';
+        } finally {
+            botonPagar.disabled = carrito.length === 0;
+            botonPagar.value = 'Pagar';
+        }
+    });
+
+    mostrarResumen();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Archivos de Windows
+ntuser.*
+
+# Node.js (Si usas módulos de node)
+node_modules/
+
+# Archivos de configuración de editores
+.vscode/
+
+# Archivos de base de datos local
+.DS_Store
