@@ -11,6 +11,16 @@ interface LoginResponse {
 })
 export class AuthService {
 
+  register(email: string, password: string, rol: string) {
+  return this.http.post(`${this.apiUrl}/register`, {
+    email,
+    password,
+    rol
+  }, {
+    responseType: 'text'
+  });
+}
+
 
   estaLogueado(): boolean {
   return this.obtenerToken() !== null;

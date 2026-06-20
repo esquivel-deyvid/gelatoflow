@@ -1,0 +1,53 @@
+<div class="registro-container">
+  <div class="registro-card">
+    <h2>GelatoFlow</h2>
+    <p>Registro de cliente</p>
+
+    <form (ngSubmit)="registrar()">
+
+      <div class="campo">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Ingrese su correo"
+          required>
+      </div>
+
+      <div class="campo">
+        <label>Contraseña</label>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Ingrese su contraseña"
+          required>
+      </div>
+
+      <div class="campo">
+        <label>Confirmar contraseña</label>
+        <input
+          type="password"
+          name="confirmarPassword"
+          [(ngModel)]="confirmarPassword"
+          placeholder="Repita su contraseña"
+          required>
+      </div>
+
+      <button type="submit">Registrarme</button>
+
+      <p class="ok" *ngIf="mensaje">
+        {{ mensaje }}
+      </p>
+
+      <p class="error" *ngIf="error">
+        {{ error }}
+      </p>
+    </form>
+
+    <button class="btn-secundario" (click)="volverLogin()">
+      Ya tengo cuenta
+    </button>
+  </div>
+</div>
