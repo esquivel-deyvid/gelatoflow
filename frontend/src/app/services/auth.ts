@@ -30,11 +30,20 @@ private apiUrl = 'https://gelatoflow-production.up.railway.app/api/auth';
     localStorage.setItem('token', token);
   }
 
+  guardarEmail(email: string): void {
+  localStorage.setItem('email', email);
+}
+
+obtenerEmail(): string | null {
+  return localStorage.getItem('email');
+}
+
   obtenerToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  cerrarSesion(): void {
-    localStorage.removeItem('token');
-  }
+ cerrarSesion(): void {
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+}
 }

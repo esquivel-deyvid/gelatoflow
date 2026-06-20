@@ -134,4 +134,107 @@
   padding: 30px;
   border-radius: 15px;
   text-align: center;
+
+  .compra-card {
+  margin-top: 15px;
+}
+
+.compra-card label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.compra-card input {
+  width: 100%;
+  padding: 9px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.btn-agregar {
+  width: 100%;
+  padding: 10px;
+  background: #222;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-agregar:hover {
+  background: #444;
+}
+
+.carrito {
+  max-width: 1100px;
+  margin: 20px auto 50px;
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.item-carrito {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.item-carrito p {
+  margin: 5px 0 0;
+  color: #555;
+}
+
+.btn-quitar {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.resumen {
+  margin-top: 20px;
+}
+
+.resumen label {
+  display: block;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+.resumen input,
+.resumen select {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.btn-comprar {
+  width: 100%;
+  padding: 13px;
+  background: #2f7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-comprar:hover {
+  background: #256428;
+}
+
+.mensaje-compra {
+  margin-top: 15px;
+  background: #fff1b8;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+}
 }

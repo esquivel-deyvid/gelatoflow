@@ -29,7 +29,8 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (respuesta) => {
         this.authService.guardarToken(respuesta.token);
-        this.router.navigate(['/productos']);
+this.authService.guardarEmail(this.email);
+this.router.navigate(['/productos']);
       },
       error: () => {
         this.mensajeError = 'Correo o contraseña incorrectos';

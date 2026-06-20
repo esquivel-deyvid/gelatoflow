@@ -15,8 +15,7 @@
     <div>
       <h2>Sabores frescos para cada momento</h2>
       <p>
-        Bienvenido al sistema de gestión de productos de la heladería GelatoFlow.
-        Aquí puedes visualizar los helados disponibles, sus precios y stock.
+        Elige tus helados favoritos, agrega cantidades al carrito y realiza tu compra con Yape o Plin.
       </p>
     </div>
   </section>
@@ -41,7 +40,7 @@
             <img
               [src]="producto.imagenUrl"
               [alt]="producto.nombre"
-              onerror="this.src='https://placehold.co/600x400/FADADD/000000?text=Helado'">
+              (error)="ponerImagenDefault($event)">
 
             <div class="card-body">
               <h3>{{ producto.nombre }}</h3>
@@ -56,6 +55,22 @@
                   Stock: {{ producto.stock }}
                 </span>
               </div>
+
+              <div class="compra-card">
+                <label>Cantidad</label>
+                <input
+                  type="number"
+                  min="1"
+                  [max]="producto.stock"
+                  [(ngModel)]="cantidades[producto.id]"
+                  name="cantidad{{ producto.id }}">
+
+                <button
+                  class="btn-agregar"
+                  (click)="agregarAlCarrito(producto)">
+                  Agregar al carrito
+                </button>
+              </div>
             </div>
 
           </div>
@@ -68,6 +83,65 @@
       <div class="vacio">
         <p>No hay productos registrados todavía.</p>
       </div>
+    }
+
+  </section>
+
+  <section class="carrito">
+    <h2>Carrito de compras</h2>
+
+    @if (carrito.length === 0) {
+      <p>No hay helados en el carrito.</p>
+    }
+
+    @if (carrito.length > 0) {
+      <div class="tabla-carrito">
+
+        @for (item of carrito; track item.producto.id) {
+          <div class="item-carrito">
+            <div>
+              <strong>{{ item.producto.nombre }}</strong>
+              <p>
+                Cantidad: {{ item.cantidad }} |
+                Subtotal: S/ {{ item.subtotal }}
+              </p>
+            </div>
+
+            <button
+              class="btn-quitar"
+              (click)="quitarDelCarrito(item.producto.id)">
+              Quitar
+            </button>
+          </div>
+        }
+
+      </div>
+
+      <div class="resumen">
+        <label>Correo del cliente</label>
+        <input
+          type="email"
+          [(ngModel)]="emailCliente"
+          name="emailCliente">
+
+        <label>Método de pago</label>
+        <select [(ngModel)]="metodoPago" name="metodoPago">
+          <option value="YAPE">Yape</option>
+          <option value="PLIN">Plin</option>
+        </select>
+
+        <h3>Total: S/ {{ calcularTotal() }}</h3>
+
+        <button
+          class="btn-comprar"
+          (click)="confirmarCompra()">
+          Confirmar compra
+        </button>
+      </div>
+    }
+
+    @if (mensajeCompra) {
+      <p class="mensaje-compra">{{ mensajeCompra }}</p>
     }
 
   </section>
