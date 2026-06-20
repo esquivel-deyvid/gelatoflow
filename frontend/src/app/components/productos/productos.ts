@@ -44,9 +44,9 @@ export class ProductosComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
   this.emailCliente = this.authService.obtenerEmail() || '';
-  this.esAdmin = this.authService.esAdmin();
+  this.esAdmin = localStorage.getItem('rol') === 'ROLE_ADMIN';
   this.obtenerProductos();
 }
 

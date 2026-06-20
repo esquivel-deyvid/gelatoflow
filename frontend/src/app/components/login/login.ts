@@ -30,9 +30,9 @@ export class LoginComponent {
       next: (respuesta) => {
         console.log('RESPUESTA LOGIN:', respuesta);
 
-        this.authService.guardarToken(respuesta.token);
-        this.authService.guardarEmail(respuesta.email);
-        this.authService.guardarRol(respuesta.rol);
+        localStorage.setItem('token', respuesta.token);
+        localStorage.setItem('email', respuesta.email);
+        localStorage.setItem('rol', respuesta.rol);
 
         this.router.navigate(['/productos']);
       },
