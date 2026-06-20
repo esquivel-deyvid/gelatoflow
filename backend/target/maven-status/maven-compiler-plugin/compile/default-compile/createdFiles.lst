@@ -1,0 +1,14 @@
+com\gelatoflow\backend\security\CustomUserDetailsService.class
+com\gelatoflow\backend\dto\LoginResponse.class
+com\gelatoflow\backend\entities\Producto.class
+com\gelatoflow\backend\repositories\ProductoRepository.class
+com\gelatoflow\backend\security\JwtService.class
+com\gelatoflow\backend\controllers\ProductoController.class
+com\gelatoflow\backend\dto\LoginRequest.class
+com\gelatoflow\backend\repositories\UsuarioRepository.class
+com\gelatoflow\backend\security\SecurityConfig.class
+com\gelatoflow\backend\entities\Usuario.class
+com\gelatoflow\backend\BackendApplication.class
+com\gelatoflow\backend\security\JwtAuthenticationFilter.class
+com\gelatoflow\backend\services\ProductoService.class
+com\gelatoflow\backend\dto\RegisterRequest.class

@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
         .requestMatchers("/api/auth/**").permitAll()
         .requestMatchers("/api/productos/**").permitAll()
+        .requestMatchers("/api/pedidos/**").permitAll()
         .anyRequest().permitAll()
 )
                 .formLogin(form -> form.disable())
