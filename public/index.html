@@ -257,25 +257,73 @@
     <p>Administra tu equipo de manera eficiente con GELATOFLOW.</p>
     
     <h3>Empleados Activos</h3>
-    <ul>
-        <li>María González - Gerente</li>
-        <li>Juan Pérez - Heladero Principal</li>
-        <li>Ana López - Cajera</li>
-        <li>Carlos Rodríguez - Repartidor</li>
-    </ul>
+    <div class="empleados-lista" id="empleadosLista">
+        <p>Cargando empleados...</p>
+    </div>
     
     <h3>Agregar Nuevo Empleado</h3>
-    <form>
-        <label>Nombre:</label>
-        <input type="text" required>
-        
-        <label>Puesto:</label>
-        <input type="text" required>
-        
-        <label>Salario:</label>
-        <input type="number" required>
-        
+    <form id="formEmpleado" class="empleado-form">
+        <label for="empleadoNombre">Nombre completo:</label>
+        <input type="text" id="empleadoNombre" required>
+
+        <label for="empleadoPuesto">Puesto:</label>
+        <input type="text" id="empleadoPuesto" placeholder="Ej: Cajero, Repartidor, Administrador" required>
+
+        <label for="empleadoSalario">Salario:</label>
+        <input type="number" id="empleadoSalario" min="0" step="0.01" required>
+
+        <label for="empleadoDni">DNI:</label>
+        <input type="text" id="empleadoDni" maxlength="20" required>
+
+        <label for="empleadoDireccion">Direccion:</label>
+        <input type="text" id="empleadoDireccion" required>
+
+        <label for="empleadoFechaNacimiento">Fecha de nacimiento:</label>
+        <input type="date" id="empleadoFechaNacimiento" required>
+
+        <label for="empleadoTelefono">Telefono:</label>
+        <input type="tel" id="empleadoTelefono" required>
+
+        <label for="empleadoCorreo">Correo:</label>
+        <input type="email" id="empleadoCorreo" required>
+
+        <label for="empleadoEstadoCivil">Estado civil:</label>
+        <select id="empleadoEstadoCivil" required>
+            <option value="">Seleccione</option>
+            <option value="Soltero">Soltero</option>
+            <option value="Casado">Casado</option>
+            <option value="Conviviente">Conviviente</option>
+            <option value="Divorciado">Divorciado</option>
+            <option value="Viudo">Viudo</option>
+        </select>
+
+        <label for="empleadoFechaInicio">Fecha de inicio:</label>
+        <input type="date" id="empleadoFechaInicio" required>
+
+        <label for="empleadoTipoContrato">Tipo de contrato:</label>
+        <select id="empleadoTipoContrato" required>
+            <option value="">Seleccione</option>
+            <option value="Indefinido">Indefinido</option>
+            <option value="Fijo">Fijo</option>
+            <option value="Por obra">Por obra</option>
+            <option value="Tiempo parcial">Tiempo parcial</option>
+        </select>
+
+        <label for="empleadoHorarioTrabajo">Horario de trabajo:</label>
+        <select id="empleadoHorarioTrabajo" required>
+            <option value="">Seleccione</option>
+            <option value="Turnos">Turnos</option>
+            <option value="Jornada laboral">Jornada laboral</option>
+        </select>
+
+        <label for="empleadoEstado">Estado:</label>
+        <select id="empleadoEstado" required>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+        </select>
+
         <input type="submit" value="Agregar Empleado">
+        <p class="auth-mensaje" id="mensajeEmpleado"></p>
     </form>
 </section>
 
@@ -318,6 +366,9 @@
     const carritoTotal = document.getElementById('carritoTotal');
     const irAPedido = document.getElementById('irAPedido');
     const cerrarSesion = document.getElementById('cerrarSesion');
+    const formEmpleado = document.getElementById('formEmpleado');
+    const empleadosLista = document.getElementById('empleadosLista');
+    const mensajeEmpleado = document.getElementById('mensajeEmpleado');
     const tipoGraficoMasVendidos = document.getElementById('tipoGraficoMasVendidos');
     const masVendidosDetalle = document.getElementById('masVendidosDetalle');
     let productosMasVendidos = [];
@@ -417,6 +468,101 @@
         });
     }
 
+    if (formEmpleado) {
+        formEmpleado.addEventListener('submit', async (e) => {
+            try {
+                e.preventDefault();
+                mensajeEmpleado.textContent = 'Guardando empleado...';
+
+                const datosEmpleado = {
+                    nombre: document.getElementById('empleadoNombre').value,
+                    puesto: document.getElementById('empleadoPuesto').value,
+                    salario: document.getElementById('empleadoSalario').value,
+                    dni: document.getElementById('empleadoDni').value,
+                    direccion: document.getElementById('empleadoDireccion').value,
+                    fechaNacimiento: document.getElementById('empleadoFechaNacimiento').value,
+                    telefono: document.getElementById('empleadoTelefono').value,
+                    correo: document.getElementById('empleadoCorreo').value,
+                    estadoCivil: document.getElementById('empleadoEstadoCivil').value,
+                    fechaInicio: document.getElementById('empleadoFechaInicio').value,
+                    tipoContrato: document.getElementById('empleadoTipoContrato').value,
+                    horarioTrabajo: document.getElementById('empleadoHorarioTrabajo').value,
+                    estado: document.getElementById('empleadoEstado').value
+                };
+
+const response = await fetch('/agregar-empleado', { 
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'x-usuario-email': localStorage.getItem('gelatoflowUsuarioActual') || ''
+    },
+    body: JSON.stringify(datosEmpleado)
+});
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mensajeEmpleado.textContent = 'Empleado guardado correctamente.';
+                    formEmpleado.reset();
+                    document.getElementById('empleadoEstado').value = 'Activo';
+                    cargarEmpleados();
+                    return;
+                }
+
+                mensajeEmpleado.textContent = data.message || 'No se pudo guardar el empleado.';
+            } catch (error) {
+                mensajeEmpleado.textContent = 'Error al conectar con el servidor.';
+            }
+        });
+    }
+
+    async function cargarEmpleados() {
+        if (rolUsuario !== 'admin' || !empleadosLista) return;
+
+        try {
+            const response = await fetch('/empleados', {
+                headers: {
+                    'x-usuario-email': localStorage.getItem('gelatoflowUsuarioActual') || ''
+                }
+            });
+            const data = await response.json();
+
+            if (!data.success) {
+                empleadosLista.innerHTML = `<p>${data.message || 'No se pudieron cargar los empleados.'}</p>`;
+                return;
+            }
+
+            if (data.empleados.length === 0) {
+                empleadosLista.innerHTML = '<p>No hay empleados registrados.</p>';
+                return;
+            }
+
+            empleadosLista.innerHTML = data.empleados.map((empleado) => `
+                <article class="empleado-card">
+                    <div>
+                        <h4>${escaparHtml(empleado.nombre)}</h4>
+                        <p>${escaparHtml(empleado.puesto)} | ${escaparHtml(empleado.estado)}</p>
+                    </div>
+                    <div class="empleado-datos">
+                        <span>DNI: ${escaparHtml(empleado.dni)}</span>
+                        <span>Edad: ${escaparHtml(empleado.edad)}</span>
+                        <span>Telefono: ${escaparHtml(empleado.telefono)}</span>
+                        <span>Correo: ${escaparHtml(empleado.correo)}</span>
+                        <span>Direccion: ${escaparHtml(empleado.direccion)}</span>
+                        <span>Estado civil: ${escaparHtml(empleado.estado_civil)}</span>
+                        <span>Cumpleanos: ${formatearFecha(empleado.fecha_nacimiento)}</span>
+                        <span>Inicio: ${formatearFecha(empleado.fecha_inicio)}</span>
+                        <span>Contrato: ${escaparHtml(empleado.tipo_contrato)}</span>
+                        <span>Horario: ${escaparHtml(empleado.horario_trabajo)}</span>
+                        <span>Salario: $${Number(empleado.salario).toFixed(2)}</span>
+                    </div>
+                </article>
+            `).join('');
+        } catch (error) {
+            empleadosLista.innerHTML = '<p>Error al conectar con el servidor.</p>';
+        }
+    }
+
     async function cargarDashboard() {
         try {
             const response = await fetch(`/dashboard?rol=${encodeURIComponent(rolUsuario)}`);
@@ -461,6 +607,22 @@
             Unidades vendidas: <strong>${producto.unidades}</strong><br>
             Posicion: <strong>${productosMasVendidos.findIndex((item) => item.producto === producto.producto) + 1}</strong>
         `;
+    }
+
+    function escaparHtml(valor) {
+        return String(valor ?? '').replace(/[&<>"']/g, (caracter) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        }[caracter]));
+    }
+
+    function formatearFecha(valor) {
+        if (!valor) return '';
+        const fecha = new Date(valor);
+        return Number.isNaN(fecha.getTime()) ? escaparHtml(valor) : fecha.toLocaleDateString('es-PE');
     }
 
     function dibujarGraficoMasVendidos(productos, tipo = 'bar') {
@@ -590,6 +752,7 @@
 
     aplicarPermisosVista();
     actualizarCarrito();
+    cargarEmpleados();
     cargarDashboard();
 </script>
 

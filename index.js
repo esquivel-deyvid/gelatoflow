@@ -39,6 +39,29 @@ const preciosProductos = {
     'Premium Fresa': 5.10
 };
 
+async function obtenerRolUsuario(email) {
+    if (!email) return null;
+
+    const [usuarios] = await db.execute(
+        'SELECT rol FROM usuarios WHERE email = ? LIMIT 1',
+        [email]
+    );
+
+    return usuarios[0]?.rol || null;
+}
+
+async function validarAdmin(req, res) {
+    const emailUsuario = req.headers['x-usuario-email'];
+    const rol = await obtenerRolUsuario(emailUsuario);
+
+    if (rol !== 'admin') {
+        res.status(403).json({ success: false, message: 'Acceso solo para administradores' });
+        return false;
+    }
+
+    return true;
+}
+
 app.post('/register', async (req, res) => {
     try {
         const { nombre, correo, password } = req.body;
@@ -178,6 +201,114 @@ app.get('/dashboard', async (req, res) => {
     } catch (error) {
         console.error('Error al cargar dashboard:', error);
         res.status(500).json({ success: false, message: 'Error al cargar dashboard' });
+    }
+});
+
+app.post('/agregar-empleado', async (req, res) => {
+    try {
+        const {
+            nombre,
+            puesto,
+            salario,
+            dni,
+            direccion,
+            fechaNacimiento,
+            telefono,
+            correo,
+            estadoCivil,
+            fechaInicio,
+            tipoContrato,
+            horarioTrabajo,
+            estado
+        } = req.body;
+
+        const camposRequeridos = [
+            nombre,
+            puesto,
+            salario,
+            dni,
+            direccion,
+            fechaNacimiento,
+            telefono,
+            correo,
+            estadoCivil,
+            fechaInicio,
+            tipoContrato,
+            horarioTrabajo
+        ];
+
+        if (camposRequeridos.some((campo) => !campo)) {
+            return res.status(400).json({ success: false, message: 'Complete todos los campos del empleado' });
+        }
+
+        const sql = `
+            INSERT INTO empleados (
+                nombre, puesto, salario, dni, direccion, fecha_nacimiento, telefono,
+                correo, estado_civil, fecha_inicio, tipo_contrato, horario_trabajo, estado
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        await db.execute(sql, [
+            nombre,
+            puesto,
+            salario,
+            dni,
+            direccion,
+            fechaNacimiento,
+            telefono,
+            correo,
+            estadoCivil,
+            fechaInicio,
+            tipoContrato,
+            horarioTrabajo,
+            estado || 'Activo'
+        ]);
+
+        res.json({ success: true, message: 'Empleado registrado con exito' });
+    } catch (error) {
+        console.error('Error al insertar empleado:', error);
+
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ success: false, message: 'El DNI o correo ya existe' });
+        }
+
+        res.status(500).json({ success: false, message: 'Error en base de datos' });
+    }
+});
+
+app.post('/agregar-empleado-anterior', async (req, res) => {
+    try {
+        const { nombre, puesto, salario, dni, direccion, fecha_nacimiento, telefono, correo, estado_civil, fecha_inicio, tipo_contrato, horario_trabajo } = req.body;
+        
+        const sql = `INSERT INTO empleados (nombre, puesto, salario, dni, direccion, fecha_nacimiento, telefono, correo, estado_civil, fecha_inicio, tipo_contrato, horario_trabajo) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        
+        await db.execute(sql, [nombre, puesto, salario, dni, direccion, fecha_nacimiento, telefono, correo, estado_civil, fecha_inicio, tipo_contrato, horario_trabajo]);
+
+        res.json({ success: true, message: 'Empleado registrado con éxito' });
+    } catch (error) {
+        console.error('Error al insertar empleado:', error);
+        res.status(500).json({ success: false, message: 'Error en base de datos' });
+    }
+});
+
+// --- RUTA OBTENER EMPLEADOS CORREGIDA ---
+app.get('/empleados', async (req, res) => {
+    try {
+        // Asegúrate de que validarAdmin esté definido arriba
+        const [empleados] = await db.execute(`
+            SELECT id, nombre, puesto, salario, dni, direccion, fecha_nacimiento, telefono,
+                   correo, estado_civil, fecha_inicio, tipo_contrato, horario_trabajo, estado,
+                   TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad
+            FROM empleados
+            ORDER BY nombre ASC
+        `);
+
+        res.json({ success: true, empleados });
+    } catch (error) {
+        console.error('Error al obtener empleados:', error);
+        res.status(500).json({ success: false, message: 'Error al obtener empleados' });
     }
 });
 

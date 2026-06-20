@@ -895,6 +895,53 @@ input[type="submit"]:disabled {
     background-color: #7a003d;
 }
 
+.empleados-lista {
+    display: grid;
+    gap: 14px;
+    margin: 18px 0 28px;
+}
+
+.empleado-card {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    background-color: #ffffff;
+    border: 1px solid rgba(155, 0, 77, 0.14);
+    border-left: 5px solid #9b004d;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.empleado-card h4 {
+    margin: 0 0 6px;
+    color: #9b004d;
+    font-size: 18px;
+}
+
+.empleado-card p {
+    margin: 0;
+    text-align: left;
+}
+
+.empleado-datos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px 14px;
+    color: #333;
+    font-size: 14px;
+}
+
+.empleado-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+}
+
+.empleado-form input[type="submit"],
+.empleado-form .auth-mensaje {
+    grid-column: 1 / -1;
+}
+
 /* ===== CARRUSEL DE IMÁGENES ===== */
 .carrusel {
     position: relative;
@@ -996,6 +1043,7 @@ body.modo-nocturno .auth-contenedor,
 body.modo-nocturno .contenedor,
 body.modo-nocturno .seccion,
 body.modo-nocturno .producto,
+body.modo-nocturno .empleado-card,
 body.modo-nocturno .carrito-panel,
 body.modo-nocturno .dashboard-grafico,
 body.modo-nocturno .mas-vendidos-control,
@@ -1045,6 +1093,7 @@ body.modo-nocturno .carrito-panel li,
 body.modo-nocturno .servicio-link,
 body.modo-nocturno .servicio-link:visited,
 body.modo-nocturno .mas-vendido-item span,
+body.modo-nocturno .empleado-datos,
 body.modo-nocturno .mas-vendidos-detalle,
 body.modo-nocturno .carrito-total {
     color: #f4eef7;
@@ -1058,6 +1107,10 @@ body.modo-nocturno .mas-vendidos-detalle {
 
 body.modo-nocturno .producto h3 {
     color: #ff8fbd;
+}
+
+body.modo-nocturno .empleado-card h4 {
+    color: #ffc857;
 }
 
 body.modo-nocturno input,
@@ -1190,6 +1243,11 @@ body.modo-nocturno .carrito-boton span {
     }
 
     .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .empleado-form,
+    .empleado-datos {
         grid-template-columns: 1fr;
     }
 

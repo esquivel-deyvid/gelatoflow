@@ -1,0 +1,53 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f3f3;
+  font-family: Arial, sans-serif;
+}
+
+.login-card {
+  width: 350px;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.campo {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.campo input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #222;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #444;
+}
+
+.error {
+  color: red;
+  margin-top: 15px;
+}

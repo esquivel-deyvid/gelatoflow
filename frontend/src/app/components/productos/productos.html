@@ -1,0 +1,75 @@
+<div class="pagina">
+
+  <header class="header">
+    <div>
+      <h1>GelatoFlow</h1>
+      <p>Heladería artesanal</p>
+    </div>
+
+    <button class="btn-salir" (click)="cerrarSesion()">
+      Cerrar sesión
+    </button>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2>Sabores frescos para cada momento</h2>
+      <p>
+        Bienvenido al sistema de gestión de productos de la heladería GelatoFlow.
+        Aquí puedes visualizar los helados disponibles, sus precios y stock.
+      </p>
+    </div>
+  </section>
+
+  <section class="contenido">
+    <h2>Catálogo de Helados</h2>
+
+    @if (cargando) {
+      <p>Cargando productos...</p>
+    }
+
+    @if (mensajeError) {
+      <p class="error">{{ mensajeError }}</p>
+    }
+
+    @if (!cargando && productos.length > 0) {
+      <div class="grid-productos">
+
+        @for (producto of productos; track producto.id) {
+          <div class="card">
+
+            <img
+              [src]="producto.imagenUrl"
+              [alt]="producto.nombre"
+              onerror="this.src='https://placehold.co/600x400/FADADD/000000?text=Helado'">
+
+            <div class="card-body">
+              <h3>{{ producto.nombre }}</h3>
+              <p>{{ producto.descripcion }}</p>
+
+              <div class="info">
+                <span class="precio">
+                  S/ {{ producto.precio }}
+                </span>
+
+                <span class="stock">
+                  Stock: {{ producto.stock }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        }
+
+      </div>
+    }
+
+    @if (!cargando && productos.length === 0) {
+      <div class="vacio">
+        <p>No hay productos registrados todavía.</p>
+      </div>
+    }
+
+  </section>
+
+</div>
