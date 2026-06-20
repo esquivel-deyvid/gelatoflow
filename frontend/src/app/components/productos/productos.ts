@@ -121,10 +121,20 @@ ngOnInit(): void {
 }
 
   quitarDelCarrito(productoId: number): void {
-    this.carrito = this.carrito.filter(
-      item => item.producto.id !== productoId
-    );
+  const itemEliminado = this.carrito.find(
+    item => item.producto.id === productoId
+  );
+
+  this.carrito = this.carrito.filter(
+    item => item.producto.id !== productoId
+  );
+
+  if (itemEliminado) {
+    this.mensajeCompra = `${itemEliminado.producto.nombre} quitado del carrito.`;
   }
+
+  this.cdr.detectChanges();
+}
 
   calcularTotal(): number {
     return this.carrito.reduce(
