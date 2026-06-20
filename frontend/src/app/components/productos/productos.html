@@ -6,9 +6,15 @@
       <p>Heladería artesanal</p>
     </div>
 
-    <button class="btn-salir" (click)="cerrarSesion()">
-      Cerrar sesión
-    </button>
+    <div class="acciones-header">
+      <button class="btn-admin" routerLink="/admin-productos">
+        Panel admin
+      </button>
+
+      <button class="btn-salir" (click)="cerrarSesion()">
+        Cerrar sesión
+      </button>
+    </div>
   </header>
 
   <section class="hero">
@@ -58,6 +64,7 @@
 
               <div class="compra-card">
                 <label>Cantidad</label>
+
                 <input
                   type="number"
                   min="1"
@@ -71,8 +78,8 @@
                   Agregar al carrito
                 </button>
               </div>
-            </div>
 
+            </div>
           </div>
         }
 

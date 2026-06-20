@@ -43,11 +43,12 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(auth -> auth
+           .authorizeHttpRequests(auth -> auth
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .requestMatchers("/api/auth/**").permitAll()
         .requestMatchers("/api/productos/**").permitAll()
         .requestMatchers("/api/pedidos/**").permitAll()
-        .anyRequest().permitAll()
+        .anyRequest().authenticated()
 )
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())

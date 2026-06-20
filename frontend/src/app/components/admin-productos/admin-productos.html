@@ -1,0 +1,79 @@
+<div class="admin-page">
+
+  <header class="header">
+    <div>
+      <h1>GelatoFlow</h1>
+      <p>Panel administrador</p>
+    </div>
+
+    <div class="acciones">
+      <button (click)="volverCatalogo()">Ver catálogo</button>
+      <button class="btn-salir" (click)="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="contenedor">
+
+    <div class="card">
+      <h2>Agregar nuevo helado</h2>
+
+      <form (ngSubmit)="guardarProducto()">
+
+        <div class="campo">
+          <label>Nombre</label>
+          <input
+            type="text"
+            name="nombre"
+            [(ngModel)]="nombre"
+            placeholder="Ejemplo: Helado de Mango">
+        </div>
+
+        <div class="campo">
+          <label>Descripción</label>
+          <textarea
+            name="descripcion"
+            [(ngModel)]="descripcion"
+            placeholder="Descripción del helado"></textarea>
+        </div>
+
+        <div class="campo">
+          <label>Precio</label>
+          <input
+            type="number"
+            name="precio"
+            [(ngModel)]="precio"
+            min="0"
+            step="0.10">
+        </div>
+
+        <div class="campo">
+          <label>Stock</label>
+          <input
+            type="number"
+            name="stock"
+            [(ngModel)]="stock"
+            min="0">
+        </div>
+
+        <div class="campo">
+          <label>Imagen URL</label>
+          <input
+            type="text"
+            name="imagenUrl"
+            [(ngModel)]="imagenUrl"
+            placeholder="/img/mango.jpg">
+        </div>
+
+        <button class="btn-guardar" type="submit">
+          Guardar helado
+        </button>
+
+        <p class="ok" *ngIf="mensaje">{{ mensaje }}</p>
+        <p class="error" *ngIf="error">{{ error }}</p>
+
+      </form>
+    </div>
+
+  </main>
+
+</div>

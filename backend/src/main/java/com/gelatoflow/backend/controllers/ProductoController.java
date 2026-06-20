@@ -14,7 +14,8 @@ import java.util.List;
 @RequestMapping("/api/productos")
 @CrossOrigin(originPatterns = {
         "http://localhost:4200",
-        "https://*.vercel.app"
+        "https://*.vercel.app",
+        "https://gelatoflow.vercel.app"
 })
 public class ProductoController {
 

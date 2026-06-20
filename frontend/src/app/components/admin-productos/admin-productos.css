@@ -1,0 +1,108 @@
+.admin-page {
+  min-height: 100vh;
+  background: #fff7f0;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background: #222;
+  color: white;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.header p {
+  margin: 5px 0 0;
+  color: #ddd;
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+}
+
+.acciones button {
+  padding: 11px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-salir {
+  background: #ff6b6b;
+  color: white;
+}
+
+.contenedor {
+  max-width: 650px;
+  margin: 40px auto;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.card h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.campo {
+  margin-bottom: 15px;
+}
+
+.campo label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.campo input,
+.campo textarea {
+  width: 100%;
+  padding: 11px;
+  box-sizing: border-box;
+}
+
+.campo textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.btn-guardar {
+  width: 100%;
+  padding: 13px;
+  background: #2f7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  background: #256428;
+}
+
+.ok {
+  color: green;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
