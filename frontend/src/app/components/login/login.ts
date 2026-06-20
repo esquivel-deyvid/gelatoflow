@@ -27,15 +27,15 @@ export class LoginComponent {
     this.mensajeError = '';
 
     this.authService.login(this.email, this.password).subscribe({
-next: (respuesta) => {
-  console.log('RESPUESTA LOGIN:', respuesta);
+      next: (respuesta) => {
+        console.log('RESPUESTA LOGIN:', respuesta);
 
-  this.authService.guardarToken(respuesta.token);
-  this.authService.guardarEmail(respuesta.email);
-  this.authService.guardarRol(respuesta.rol);
+        this.authService.guardarToken(respuesta.token);
+        this.authService.guardarEmail(respuesta.email);
+        this.authService.guardarRol(respuesta.rol);
 
-  this.router.navigate(['/productos']);
-},
+        this.router.navigate(['/productos']);
+      },
       error: () => {
         this.mensajeError = 'Correo o contraseña incorrectos';
       }
