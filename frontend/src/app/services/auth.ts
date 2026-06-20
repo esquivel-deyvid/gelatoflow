@@ -12,6 +12,7 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
+  
 
   private http = inject(HttpClient);
   private apiUrl = 'https://gelatoflow-production.up.railway.app/api/auth';
@@ -49,21 +50,21 @@ export class AuthService {
     return localStorage.getItem('email');
   }
 
-  guardarRol(rol: string): void {
-    localStorage.setItem('rol', rol);
-  }
+ guardarRol(rol: string): void {
+  localStorage.setItem('rol', rol);
+}
 
-  obtenerRol(): string | null {
-    return localStorage.getItem('rol');
-  }
+obtenerRol(): string | null {
+  return localStorage.getItem('rol');
+}
 
-  esAdmin(): boolean {
-    return this.obtenerRol() === 'ROLE_ADMIN';
-  }
+esAdmin(): boolean {
+  return this.obtenerRol() === 'ROLE_ADMIN';
+}
 
-  cerrarSesion(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('rol');
-  }
+cerrarSesion(): void {
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+  localStorage.removeItem('rol');
+}
 }

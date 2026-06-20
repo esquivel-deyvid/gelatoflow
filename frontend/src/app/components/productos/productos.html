@@ -7,9 +7,11 @@
     </div>
 
     <div class="acciones-header">
-      <button class="btn-admin" routerLink="/admin-productos">
-        Panel admin
-      </button>
+      @if (esAdmin) {
+  <button class="btn-admin" routerLink="/admin-productos">
+    Panel admin
+  </button>
+}
 
       <button class="btn-salir" (click)="cerrarSesion()">
         Cerrar sesión

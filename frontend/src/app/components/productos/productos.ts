@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { ProductoService, Producto } from '../../services/producto';
 import { PedidoService } from '../../services/pedido';
@@ -15,11 +14,13 @@ interface ItemCarrito {
 @Component({
   selector: 'app-productos',
   standalone: true,
- imports: [FormsModule, RouterLink],
+ imports: [FormsModule, RouterLink ],
+ 
   templateUrl: './productos.html',
   styleUrl: './productos.css'
 })
 export class ProductosComponent implements OnInit {
+  
 
   productos: Producto[] = [];
   carrito: ItemCarrito[] = [];
@@ -33,6 +34,8 @@ export class ProductosComponent implements OnInit {
   metodoPago: string = 'YAPE';
   emailCliente: string = '';
 
+  esAdmin: boolean = false;
+
   constructor(
     private authService: AuthService,
     private productoService: ProductoService,
@@ -42,9 +45,10 @@ export class ProductosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.emailCliente = this.authService.obtenerEmail() || '';
-    this.obtenerProductos();
-  }
+  this.emailCliente = this.authService.obtenerEmail() || '';
+  this.esAdmin = this.authService.esAdmin();
+  this.obtenerProductos();
+}
 
   obtenerProductos(): void {
     this.cargando = true;
