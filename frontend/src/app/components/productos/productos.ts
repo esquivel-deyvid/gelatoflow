@@ -77,42 +77,48 @@ ngOnInit(): void {
   }
 
   agregarAlCarrito(producto: Producto): void {
-    this.mensajeCompra = '';
+  this.mensajeCompra = '';
 
-    let cantidad = Number(this.cantidades[producto.id]);
+  let cantidad = Number(this.cantidades[producto.id]);
 
-    if (!cantidad || cantidad <= 0) {
-      this.mensajeCompra = 'La cantidad debe ser mayor a cero.';
-      return;
-    }
-
-    if (cantidad > producto.stock) {
-      this.mensajeCompra = 'No hay stock suficiente para ' + producto.nombre;
-      return;
-    }
-
-    const itemExistente = this.carrito.find(
-      item => item.producto.id === producto.id
-    );
-
-    if (itemExistente) {
-      const nuevaCantidad = itemExistente.cantidad + cantidad;
-
-      if (nuevaCantidad > producto.stock) {
-        this.mensajeCompra = 'No puedes agregar más del stock disponible.';
-        return;
-      }
-
-      itemExistente.cantidad = nuevaCantidad;
-      itemExistente.subtotal = nuevaCantidad * Number(producto.precio);
-    } else {
-      this.carrito.push({
-        producto: producto,
-        cantidad: cantidad,
-        subtotal: cantidad * Number(producto.precio)
-      });
-    }
+  if (!cantidad || cantidad <= 0) {
+    this.mensajeCompra = 'La cantidad debe ser mayor a cero.';
+    this.cdr.detectChanges();
+    return;
   }
+
+  if (cantidad > producto.stock) {
+    this.mensajeCompra = 'No hay stock suficiente para ' + producto.nombre;
+    this.cdr.detectChanges();
+    return;
+  }
+
+  const itemExistente = this.carrito.find(
+    item => item.producto.id === producto.id
+  );
+
+  if (itemExistente) {
+    const nuevaCantidad = itemExistente.cantidad + cantidad;
+
+    if (nuevaCantidad > producto.stock) {
+      this.mensajeCompra = 'No puedes agregar más del stock disponible.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    itemExistente.cantidad = nuevaCantidad;
+    itemExistente.subtotal = nuevaCantidad * Number(producto.precio);
+  } else {
+    this.carrito.push({
+      producto: producto,
+      cantidad: cantidad,
+      subtotal: cantidad * Number(producto.precio)
+    });
+  }
+
+  this.mensajeCompra = `${producto.nombre} agregado al carrito.`;
+  this.cdr.detectChanges();
+}
 
   quitarDelCarrito(productoId: number): void {
     this.carrito = this.carrito.filter(
