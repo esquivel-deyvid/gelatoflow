@@ -60,6 +60,9 @@ export class AuthService {
   esAdmin(): boolean {
     return this.obtenerRol() === 'ROLE_ADMIN';
   }
+  estaLogueado(): boolean {
+  return this.obtenerToken() !== null;
+}
 
   cerrarSesion(): void {
     localStorage.removeItem('token');
