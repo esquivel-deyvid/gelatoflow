@@ -60,4 +60,13 @@ button:hover {
 .btn-registro:hover {
   background: #555;
 }
+
+.btn-registro {
+  margin-top: 12px;
+  background: #777;
+}
+
+.btn-registro:hover {
+  background: #555;
+}
 }

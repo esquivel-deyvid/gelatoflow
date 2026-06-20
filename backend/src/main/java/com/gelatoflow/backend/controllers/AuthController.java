@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @CrossOrigin(originPatterns = {
         "http://localhost:4200",
-        "https://*.vercel.app"
+        "https://*.vercel.app",
+        "https://gelatoflow.vercel.app"
 })
 public class AuthController {
 
@@ -75,6 +76,15 @@ public class AuthController {
 
         String token = jwtService.generateToken(userDetails);
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                new LoginResponse(
+                        token,
+                        usuario.getEmail(),
+                        usuario.getRol()
+                )
+        );
     }
 }

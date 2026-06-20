@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+
 import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-imports: [CommonModule, FormsModule, RouterLink],
-  
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -30,13 +29,14 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: (respuesta) => {
         this.authService.guardarToken(respuesta.token);
-this.authService.guardarEmail(this.email);
-this.router.navigate(['/productos']);
+        this.authService.guardarEmail(respuesta.email);
+        this.authService.guardarRol(respuesta.rol);
+
+        this.router.navigate(['/productos']);
       },
       error: () => {
         this.mensajeError = 'Correo o contraseña incorrectos';
       }
     });
   }
-  
 }
